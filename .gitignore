@@ -159,3 +159,5 @@ build-iPhoneSimulator/
 # Sonarlint plugin
 
 # End of https://www.gitignore.io/api/ruby,rubymine,intellij
+
+.vagrant/
