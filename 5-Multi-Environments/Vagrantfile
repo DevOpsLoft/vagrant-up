@@ -1,0 +1,44 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define "dev" do |dev|
+
+    dev.vm.provider :virtualbox do |virtualbox,override|
+
+#      dev.vm.provision "dev_provisioner", type: "shell", path: "bootstrap.sh"
+      dev.vm.box = "ubuntu/bionic64"
+      dev.vm.network "forwarded_port", guest: 80, host: 5000
+
+      v.name = "dev"
+      v.memory = 1024
+      v.cpus = 2
+
+    end
+  end
+
+  config.vm.define "stage" do |stage|
+
+    stage.vm.provider :aws do |aws,override|
+
+      # stage.vm.provision "stage_provisioner", type: "shell", path: "bootstrap.sh"
+
+      stage.vm.synced_folder ".", "/vagrant", disabled: true
+      stage.vm.box = "dummy"
+
+      aws.keypair_name = "KEY NAME"
+      aws.ami = "AMI ID"
+      aws.instance_type = "t2.micro"
+      aws.region = "REGION"
+      aws.subnet_id = "SUBNET ID"
+      aws.security_groups = ["SECURITY GROUP ID"]
+      aws.associate_public_ip = true
+
+      override.ssh.username = "ubuntu"
+      override.ssh.private_key_path = "MY PRIVATE KEY PATH"
+
+   end
+ end
+
+end
